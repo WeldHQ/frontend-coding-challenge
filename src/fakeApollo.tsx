@@ -41,15 +41,17 @@ export const useDataQuery = () => {
 };
 
 export function useCreateDataMutation(): [
-  (props: { data: Omit<Data, "id"> }) => any,
-  { loading: boolean }
+  (props: { data: Omit<Data, "id"> }) => Promise<Data>,
+  { loading: boolean },
 ] {
   const [, setData] = useContext(FakeAPIContext);
   const { load, loading } = useFakeLoading();
   return [
     async ({ data }) => {
       return load().then(() => {
-        setData((prev) => [...prev, { ...data, id: uuid() }]);
+        const newItem = { ...data, id: uuid() };
+        setData((prev) => [...prev, newItem]);
+        return newItem;
       });
     },
     { loading },
@@ -57,7 +59,7 @@ export function useCreateDataMutation(): [
 }
 
 export function useRemoveDataMutation(): [
-  (props: { id: string }) => any,
+  (props: { id: string }) => Promise<void>,
   { loading: boolean }
 ] {
   const [, setData] = useContext(FakeAPIContext);
@@ -73,7 +75,7 @@ export function useRemoveDataMutation(): [
 }
 
 export function useUpdateDataMutation(): [
-  (props: { data: Data; id: string }) => any,
+  (props: { data: Data; id: string }) => Promise<void>,
   { loading: boolean }
 ] {
   const [, setData] = useContext(FakeAPIContext);
