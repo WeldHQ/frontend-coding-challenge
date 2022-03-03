@@ -47,13 +47,16 @@ export function useCreateDataMutation(): [
   const [, setData] = useContext(FakeAPIContext);
   const { load, loading } = useFakeLoading();
   return [
-    async ({ data }) => {
-      return load().then(() => {
-        const newItem = { ...data, id: uuid() };
-        setData((prev) => [...prev, newItem]);
-        return newItem;
-      });
-    },
+    useCallback(
+      async ({ data }) => {
+        return load().then(() => {
+          const newItem = { ...data, id: uuid() };
+          setData((prev) => [...prev, newItem]);
+          return newItem;
+        });
+      },
+      [load, setData],
+    ),
     { loading },
   ];
 }
@@ -65,11 +68,14 @@ export function useRemoveDataMutation(): [
   const [, setData] = useContext(FakeAPIContext);
   const { load, loading } = useFakeLoading();
   return [
-    async ({ id }) => {
-      return load().then(() => {
-        setData((prev) => prev.filter((x) => x.id !== id));
-      });
-    },
+    useCallback(
+      async ({ id }) => {
+        return load().then(() => {
+          setData((prev) => prev.filter((x) => x.id !== id));
+        });
+      },
+      [load, setData],
+    ),
     { loading },
   ];
 }
@@ -81,11 +87,16 @@ export function useUpdateDataMutation(): [
   const [, setData] = useContext(FakeAPIContext);
   const { load, loading } = useFakeLoading();
   return [
-    async ({ data, id }) => {
-      return load().then(() => {
-        setData((prev) => prev.map((x) => (x.id === id ? { ...x, ...data } : x)));
-      });
-    },
+    useCallback(
+      async ({ data, id }) => {
+        return load().then(() => {
+          setData((prev) =>
+            prev.map((x) => (x.id === id ? { ...x, ...data } : x)),
+          );
+        });
+      },
+      [load, setData],
+    ),
     { loading },
   ];
 }
