@@ -10,11 +10,10 @@ const FakeAPIContext = createContext<[Data[], Dispatch<SetStateAction<Data[]>>]>
   [] as unknown as [Data[], Dispatch<SetStateAction<Data[]>>]
 );
 
-export const FakeAPIProvider = (props: {
-  children: JSX.Element | JSX.Element[];
+export const FakeAPIProvider = (props: React.PropsWithChildren<{
   initialState: Data[];
-}) => {
-  const state = useState<Data[]>(props.initialState);
+}>) => {
+  const state = useState(props.initialState);
   return <FakeAPIContext.Provider value={state}>{props.children}</FakeAPIContext.Provider>;
 };
 
