@@ -1,7 +1,4 @@
-import { useCallback, useContext } from "react";
-import { useEffect } from "react";
-import { Dispatch, SetStateAction, useState } from "react";
-import { createContext } from "react";
+import { Dispatch, SetStateAction, createContext, useCallback, useContext, useEffect, useState } from "react";
 import { v4 as uuid } from "uuid";
 
 type Data = {
@@ -21,8 +18,8 @@ export const FakeAPIProvider = (props: {
   return <FakeAPIContext.Provider value={state}>{props.children}</FakeAPIContext.Provider>;
 };
 
-const useFakeLoading = () => {
-  const [loading, setLoading] = useState(false);
+const useFakeLoading = (initialValue?: boolean) => {
+  const [loading, setLoading] = useState(initialValue ?? false);
   const load = useCallback(async () => {
     setLoading(true);
     await new Promise<void>((resolve) => setTimeout(() => resolve(), 1500));
@@ -33,7 +30,7 @@ const useFakeLoading = () => {
 
 export const useDataQuery = () => {
   const [data] = useContext(FakeAPIContext);
-  const { load, loading } = useFakeLoading();
+  const { load, loading } = useFakeLoading(true);
   useEffect(() => {
     load();
   }, [load]);
