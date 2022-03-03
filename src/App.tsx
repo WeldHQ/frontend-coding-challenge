@@ -1,8 +1,8 @@
-import { useCallback } from "react";
-import { useDataQuery, useRemoveDataMutation } from "./fakeApollo";
-import { FakeAPIProvider } from "./fakeApollo";
-import { v4 as uuid } from "uuid";
 import { XIcon } from "@heroicons/react/outline";
+import { useCallback } from "react";
+import { v4 as uuid } from "uuid";
+
+import { FakeAPIProvider, useDataListQuery, useRemoveDataMutation } from "./fakeApollo";
 
 export default function App() {
   return (
@@ -18,7 +18,7 @@ export default function App() {
 }
 
 function Main() {
-  const { data, loading } = useDataQuery();
+  const { data, loading } = useDataListQuery();
 
   const [remove] = useRemoveDataMutation();
   const handleRemove = useCallback(

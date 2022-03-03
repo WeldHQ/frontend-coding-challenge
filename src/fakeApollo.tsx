@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, createContext, useCallback, useContext, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { v4 as uuid } from "uuid";
 
 type Data = {
@@ -28,8 +28,21 @@ const useFakeLoading = (initialValue?: boolean) => {
   return { load, loading };
 };
 
-export const useDataQuery = () => {
+export const useDataListQuery = () => {
   const [data] = useContext(FakeAPIContext);
+  const { load, loading } = useFakeLoading(true);
+  useEffect(() => {
+    load();
+  }, [load]);
+  return { data: loading ? null : data, loading };
+};
+
+export const useDataQuery = (id: string | undefined) => {
+  const [list] = useContext(FakeAPIContext);
+  const data = useMemo(() => {
+    return list.find((x) => x.id === id);
+  }, [list, id]);
+
   const { load, loading } = useFakeLoading(true);
   useEffect(() => {
     load();
