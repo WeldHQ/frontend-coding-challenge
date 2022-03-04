@@ -40,10 +40,10 @@ export const useDataListQuery = () => {
   return { data: loading ? null : data, loading };
 };
 
-export const useDataQuery = (id: string | undefined) => {
+export const useDataQuery = (id: string) => {
   const [list] = useContext(FakeAPIContext);
   const data = useMemo(() => {
-    return list.find((x) => x.id === id);
+    return list.find((x) => x.id === id) ?? null;
   }, [list, id]);
 
   const { load, loading } = useFakeLoading(true);
