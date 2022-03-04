@@ -17,11 +17,15 @@ export const FakeAPIProvider = (props: React.PropsWithChildren<{
   return <FakeAPIContext.Provider value={state}>{props.children}</FakeAPIContext.Provider>;
 };
 
+function getRandomDelay(min: number, max: number) {
+  return min + Math.random() * (max - min)
+}
+
 const useFakeLoading = (initialValue?: boolean) => {
   const [loading, setLoading] = useState(initialValue ?? false);
   const load = useCallback(async () => {
     setLoading(true);
-    await new Promise<void>((resolve) => setTimeout(() => resolve(), 1500));
+    await new Promise<void>((resolve) => setTimeout(() => resolve(), getRandomDelay(100, 1000)));
     setLoading(false);
   }, []);
   return { load, loading };
